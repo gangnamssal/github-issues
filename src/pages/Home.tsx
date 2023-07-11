@@ -1,18 +1,42 @@
-import { Octokit, App } from "octokit";
+import { cloneElement, Suspense } from 'react';
+import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
+
+import Error from 'components/Error';
+import ErrorBoundary from 'components/ErrorBoundary';
+import useInfinityQuery from 'hooks/useInfinityQuery';
+import { AxiosResponse } from 'axios';
+
+const HomeFetcher = ({ children }: { children: React.PropsWithChildren<ReactJSXElement> }) => {
+  const { data, setPage } = useInfinityQuery<IParams>('facebook/react/issues', { page: 1, per_page: 20 });
+
+  return cloneElement(children, { data, setPage });
+};
+
+const HomeContents = ({ data, setPage }: Partial<IContents>) => {
+  console.log(data);
+  return <>div</>;
+};
 
 export default function Home() {
-  //   const octokit = new Octokit({
-  //     auth: import.meta.env.VITE_ACCESS_KEY as string,
-  //   });
+  return (
+    <main>
+      <ErrorBoundary fallback={Error}>
+        <Suspense fallback={<div>Loading</div>}>
+          <HomeFetcher>
+            <HomeContents />
+          </HomeFetcher>
+        </Suspense>
+      </ErrorBoundary>
+    </main>
+  );
+}
 
-  //   const test = octokit.request(`GET /repos/facebook/react/issues`, {
-  //     owner: 'facebook',
-  //     repo: 'react',
-  //     headers: {
-  //       'X-GitHub-Api-Version': '2022-11-28',
-  //     },
-  //   });
+interface IParams {
+  page: number;
+  per_page: number;
+}
 
-  //   console.log(test);
-  return <main>div</main>;
+interface IContents {
+  data: AxiosResponse;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
 }

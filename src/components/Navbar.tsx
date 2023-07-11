@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
-import { Outlet } from "react-router-dom";
+import { css } from '@emotion/react';
+import { Outlet } from 'react-router-dom';
 
 export default function Navbar() {
   return (
