@@ -9,7 +9,7 @@ import ErrorBoundary from 'components/ErrorBoundary';
 import useInfinityQuery from 'hooks/useInfinityQuery';
 
 const HomeFetcher = ({ children }: { children: React.PropsWithChildren<ReactJSXElement> }) => {
-  const { data, setPage } = useInfinityQuery<IParams, IAction>('facebook/react/issues', addIssues, {
+  const { setPage } = useInfinityQuery<IParams, IAction>('facebook/react/issues', addIssues, {
     page: 1,
     per_page: 20,
   });

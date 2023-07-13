@@ -2,13 +2,15 @@
 import { css } from '@emotion/react';
 import { useSelector } from 'react-redux';
 import { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
+import ad from 'assets/image.png';
 import { RootState } from 'modules';
 import { Issue } from 'modules/homeStore';
-import ad from 'assets/image.png';
 
 const HomeContents = ({ setPage }: Partial<IContents>) => {
   const divRef = useRef<IRef>({});
+  const navigate = useNavigate();
   const { issues } = useSelector((state: RootState) => state.homeStore);
 
   const intersection = new IntersectionObserver((entries, observer) => {
@@ -33,7 +35,7 @@ const HomeContents = ({ setPage }: Partial<IContents>) => {
       {issues.map((issue: Issue, index: number) => {
         const [year, month, date] = issue.created_at.split('T')[0].split('-');
         return (
-          <>
+          <div key={`${issue.id} / ${index}`}>
             {index && index % 4 === 0 ? (
               <div css={adStyle} onClick={() => (window.location.href = 'https://www.wanted.co.kr/')}>
                 <img src={ad} alt="ad" />
@@ -41,10 +43,10 @@ const HomeContents = ({ setPage }: Partial<IContents>) => {
             ) : null}
             <div
               css={homeContentsContainerStyle}
-              key={`${issue.id} / ${index}`}
               ref={(ref) => {
                 if (ref) divRef.current[index] = ref;
               }}
+              onClick={() => navigate(`/issue/${issue.id}`, { state: { ...issue } })}
             >
               <div>
                 <p>
@@ -59,7 +61,7 @@ const HomeContents = ({ setPage }: Partial<IContents>) => {
                 <p>코멘트: {issue.comments}</p>
               </div>
             </div>
-          </>
+          </div>
         );
       })}
     </>
