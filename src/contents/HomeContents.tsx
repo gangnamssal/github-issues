@@ -5,6 +5,7 @@ import { useEffect, useRef } from 'react';
 
 import { RootState } from 'modules';
 import { Issue } from 'modules/homeStore';
+import ad from 'assets/image.png';
 
 const HomeContents = ({ setPage }: Partial<IContents>) => {
   const divRef = useRef<IRef>({});
@@ -32,26 +33,33 @@ const HomeContents = ({ setPage }: Partial<IContents>) => {
       {issues.map((issue: Issue, index: number) => {
         const [year, month, date] = issue.created_at.split('T')[0].split('-');
         return (
-          <div
-            css={homeContentsContainerStyle}
-            key={`${issue.id} / ${index}`}
-            ref={(ref) => {
-              if (ref) divRef.current[index] = ref;
-            }}
-          >
-            <div>
-              <p>
-                {`#${issue.number}`} {issue.title}
-              </p>
-              <p>
-                작성자: {issue.user.login}, 작성일: {year}년 {month}월 {date}일
-              </p>
-            </div>
+          <>
+            {index && index % 4 === 0 ? (
+              <div css={adStyle} onClick={() => (window.location.href = 'https://www.wanted.co.kr/')}>
+                <img src={ad} alt="ad" />
+              </div>
+            ) : null}
+            <div
+              css={homeContentsContainerStyle}
+              key={`${issue.id} / ${index}`}
+              ref={(ref) => {
+                if (ref) divRef.current[index] = ref;
+              }}
+            >
+              <div>
+                <p>
+                  {`#${issue.number}`} {issue.title}
+                </p>
+                <p>
+                  작성자: {issue.user.login}, 작성일: {year}년 {month}월 {date}일
+                </p>
+              </div>
 
-            <div>
-              <p>코멘트: {issue.comments}</p>
+              <div>
+                <p>코멘트: {issue.comments}</p>
+              </div>
             </div>
-          </div>
+          </>
         );
       })}
     </>
@@ -74,6 +82,20 @@ const homeContentsContainerStyle = css`
   align-items: center;
   border-bottom: 2px solid #ddddddff;
   cursor: pointer;
+`;
+
+const adStyle = css`
+  display: flex;
+  width: 100%;
+  height: 15vh;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  img {
+    width: 100px;
+    height: 50px;
+  }
 `;
 
 export default HomeContents;
