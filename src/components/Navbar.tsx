@@ -19,7 +19,7 @@ const navbarStyle = css`
   align-items: center;
   width: 100%;
   height: 10vh;
-  border-bottom: 2px solid #ddddddff;
+  border-bottom: 2px solid black;
 
   .title {
     font-size: 2rem;

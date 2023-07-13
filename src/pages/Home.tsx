@@ -2,19 +2,18 @@ import { cloneElement, Suspense } from 'react';
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
 
 import Error from 'components/Error';
+import HomeContents from 'contents/HomeContents';
+import { addIssues, Issue } from 'modules/homeStore';
 import ErrorBoundary from 'components/ErrorBoundary';
 import useInfinityQuery from 'hooks/useInfinityQuery';
-import { AxiosResponse } from 'axios';
 
 const HomeFetcher = ({ children }: { children: React.PropsWithChildren<ReactJSXElement> }) => {
-  const { data, setPage } = useInfinityQuery<IParams>('facebook/react/issues', { page: 1, per_page: 20 });
+  const { data, setPage } = useInfinityQuery<IParams, IAction>('facebook/react/issues', addIssues, {
+    page: 1,
+    per_page: 20,
+  });
 
-  return cloneElement(children, { data, setPage });
-};
-
-const HomeContents = ({ data, setPage }: Partial<IContents>) => {
-  console.log(data);
-  return <>div</>;
+  return cloneElement(children, { setPage });
 };
 
 export default function Home() {
@@ -36,7 +35,6 @@ interface IParams {
   per_page: number;
 }
 
-interface IContents {
-  data: AxiosResponse;
-  setPage: React.Dispatch<React.SetStateAction<number>>;
+export interface IAction {
+  <T extends Issue>(issue: T[]): ReturnType<typeof addIssues>;
 }

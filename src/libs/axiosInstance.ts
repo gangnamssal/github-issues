@@ -7,7 +7,7 @@ const Axios = axios.create({
     Authorization: `Bearer ${process.env.REACT_APP_ACCESS_KEY}`,
     'X-GitHub-Api-Version': '2022-11-28',
   },
-  timeout: 2000,
+  timeout: 5000,
 });
 
 export default Axios;
